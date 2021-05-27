@@ -4,7 +4,9 @@ import Container from './style'
 const Tooltip = ({ children, hint }) => {
 
     return (
-        <Container hint={hint}>{children}</Container>
+        <Container hint={hint}>
+            {children}
+        </Container>
     )
 }
 

@@ -22,6 +22,7 @@ import HookSamples from 'components/Hooks'
 import SampleContext from 'context/SampleContext'
 import Card from 'components/Card'
 import Tooltip from 'components/Tooltip'
+import Board from 'drag_n_drop'
 const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
         {...rest}
@@ -101,7 +102,7 @@ class App extends Component {
                             <Movies />
                             <MoviesForm />
                             <p> <Tooltip hint="role play game">rpg</Tooltip> to gry do których niezbęgny jest <Tooltip hint="mistrz gry">mg</Tooltip>  </p>
-
+                            <Board />
                             <Card />
                             <HookSamples initialCount={5} />
                             <Switch>
