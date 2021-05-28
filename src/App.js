@@ -23,6 +23,7 @@ import SampleContext from 'context/SampleContext'
 import Card from 'components/Card'
 import Tooltip from 'components/Tooltip'
 import Board from 'drag_n_drop'
+import RamdaSamples from 'ramda-sample'
 const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
         {...rest}
@@ -103,6 +104,7 @@ class App extends Component {
                             <MoviesForm />
                             <p> <Tooltip hint="role play game">rpg</Tooltip> to gry do których niezbęgny jest <Tooltip hint="mistrz gry">mg</Tooltip>  </p>
                             <Board />
+                            <RamdaSamples />
                             <Card />
                             <HookSamples initialCount={5} />
                             <Switch>
