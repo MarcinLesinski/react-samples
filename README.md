@@ -3,17 +3,24 @@
 This project is react sandbox.
 
 ## Used libs, feats, patterns etc.
-- react
-- styled-components
-- ramda
-- drag and drop - react-dnd
-- react hooks
-- reducer pattern
-- react context
-- type script
-- redux
-- formik
-- routing - react-router-dom
+* react
+  * context
+  * hooks
+  * reducer pattern
+* styled-components
+  * themes
+  * WebFont
+* libs
+  * ramda
+  * lodash
+  * drag and drop - react-dnd
+  * formik
+  * routing - react-router-dom
+  * redux
+  * mobx
+  * nanoid
+* type script
+
 
 
 ## License

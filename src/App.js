@@ -1,4 +1,4 @@
-import React, { Component, createContext } from 'react'
+import React, { Component, createContext, useState, useEffect } from 'react'
 import Data from "./Data"
 import Array from "./components/ArraySample/Array"
 import LifeCycleSample from "./components/LifeCycleSample"
@@ -14,7 +14,7 @@ import Composition from 'style_samples/Composition'
 import Sword from 'style_samples/Sword'
 import root from 'helpers/local_paths'
 import { CurrentUserProvider, CurrentUserConsumer } from 'context/CurrentUser.context'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
 import rootReducer from './reducers'
 import Movies from 'app/movies/components/Movies'
 import { default as MoviesForm } from 'app/movies/components/Form'
@@ -24,6 +24,13 @@ import Card from 'components/Card'
 import Tooltip from 'components/Tooltip'
 import Board from 'drag_n_drop'
 import RamdaSamples from 'ramda-sample'
+import MobxDemo from 'mobx-sample'
+import useTheme from "theme/useTheme"
+import GlobalStyles from "theme/GlobalStyles"
+import WebFont from "webfontloader";
+import ThemeSelector from "theme/components/ThemeSelector"
+import CreateTheme from "theme/components/CreateTheme"
+
 const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
         {...rest}
@@ -45,27 +52,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
     />
 )
 
-const GlobalStyle = createGlobalStyle`
-    body, html{
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        background: #111111;
-        /* display: flex; */
-        /* justify-content: center; */
-        /* align-items: center; */
-    }
-`
-
 const Container = styled.div`
-    
-    /* margin: auto auto; */
-    /* display: flex; */
-    /* justify-content: center; */
-    
-    /* align-self: center; */
     padding: 0;
-    margin: 0;
+    margin: 5px auto 5px auto;
     width: 100%;
     height: 100vh;
 `
@@ -75,63 +64,62 @@ const Container = styled.div`
 // font - family: 'Source Sans Pro', sans - serif;
 // background: #fff;
 
-class App extends Component {
+const App = () => {
+    const { theme, themeLoaded, getFonts } = useTheme()
+    const [selectedTheme, setSelectedTheme] = useState(theme)
 
-    state = {
-        name: "aQuu",
-        data: []
-    }
+    useEffect(() => {
+        setSelectedTheme(theme)
+    }, [themeLoaded])
 
-    componentDidMount() {
-        return
-        fetch('http://localhost:8080/api/data')
-            .then(response => response.json())
-            .then((data) => {
-                // console.log(data);
-                this.setState({ data: data })
-            });
-    }
+    useEffect(() => {
+        WebFont.load({
+            google: {
+                families: getFonts()
+            }
+        })
+    })
 
-    render() {
-        return (
-            <SampleContext.Provider value={({ data1: 321, data2: '321' })}>
-                <Container >
-                    <GlobalStyle />
-                    <Router>
-                        <CurrentUserProvider>
-                            <Navbar />
-                            <Movies />
-                            <MoviesForm />
-                            <p> <Tooltip hint="role play game">rpg</Tooltip> to gry do których niezbęgny jest <Tooltip hint="mistrz gry">mg</Tooltip>  </p>
-                            <Board />
-                            <RamdaSamples />
-                            <Card />
-                            <HookSamples initialCount={5} />
-                            <Switch>
-                                <Route exact path="/" component={Array} />
-                                <PrivateRoute path="/items/:itemId" component={Editor} />
-                                <Route path="/login" component={Login}></Route>
-                                <Route exact path="/test" component={ApiTest} />
-                                <Route exact path={root.css._} component={CssMenu} />
-                                <Route exact path={root.css.composition} component={Composition} />
-                                <Route exact path={root.css.sword} component={Sword} />
+    return (
+        <>{themeLoaded &&
+            <ThemeProvider theme={selectedTheme}>
+                <GlobalStyles />
 
-                                <Route component={NotFound} />
+                <SampleContext.Provider value={({ data1: 321, data2: '321' })}>
+                    <Container style={{ fontFamily: selectedTheme.font }}>
+                        <CreateTheme />
+                        <ThemeSelector setter={setSelectedTheme} />
+                        <Router>
+                            <CurrentUserProvider>
+                                <Navbar />
+                                <Movies />
+                                <MoviesForm />
+                                <p> <Tooltip hint="role play game">rpg</Tooltip> to gry do których niezbęgny jest <Tooltip hint="mistrz gry">mg</Tooltip>  </p>
+                                <Board />
+                                <RamdaSamples />
+                                <MobxDemo />
+                                <Card />
+                                <HookSamples initialCount={5} />
+                                <Switch>
+                                    <Route exact path="/" component={Array} />
+                                    <PrivateRoute path="/items/:itemId" component={Editor} />
+                                    <Route path="/login" component={Login}></Route>
+                                    <Route exact path="/test" component={ApiTest} />
+                                    <Route exact path={root.css._} component={CssMenu} />
+                                    <Route exact path={root.css.composition} component={Composition} />
+                                    <Route exact path={root.css.sword} component={Sword} />
 
-                            </Switch>
+                                    <Route component={NotFound} />
 
-                        </CurrentUserProvider>
-                    </Router>
-                </Container>
-            </SampleContext.Provider>
-            // <div>
-            //     <ApiTest />
-            //     <Array />
-            //     <LifeCycleSample name="circle of life" />
-            //     {/* {this.state.data.map(data => <Data key={data.id} title='props_title' info={data} />)} */}
-            // </div>
-        );
-    }
+                                </Switch>
+
+                            </CurrentUserProvider>
+                        </Router>
+                    </Container>
+                </SampleContext.Provider>
+            </ThemeProvider>
+        }</>
+    );
 }
 
 export default App;
